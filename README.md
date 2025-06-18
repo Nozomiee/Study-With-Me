@@ -1,2 +1,1 @@
-# ms-mice-webpage
-My First Cozy Webpage featuring my little mouse illustration aka the face mascot of Ms. Mice.
+My First Cozy Webpage featuring my little mouse illustration AKA the Mascot character of Ms. Mice.
