@@ -302,7 +302,7 @@ img.cozy-characters {
 <audio id="sparklesound" src="grr.mp3" preload="auto"></audio>
 
 <div id="timer-box" style="text-align:center; margin: 20px auto;">
-  <h3 style="margin-bottom: 10px;">⏰ Custom Timer</h3>
+  <h3 style="margin-bottom: 10px;">⏳⌛⏳</h3>
 
   <label for="custom-minutes" style="font-size: 1.1rem;">Set Minutes:</label><br>
   <input type="number" id="custom-minutes" min="1" max="180" value="25"
@@ -310,7 +310,7 @@ img.cozy-characters {
 
   <div id="timer-display" style="font-size: 2.2rem; margin: 10px 0;">25:00</div>
 
-  <button id="start-timer" class="square-button">▶</button>
+  <button id="start-timer" class="square-button">►</button>
   <button id="pause-timer" class="square-button">❚❚</button>
   <button id="reset-timer" class="square-button">↺</button>
 
@@ -319,7 +319,7 @@ img.cozy-characters {
 
 
 
-  <p>This is my very first web page. And I'm very excited to make use of whatever I learn, well and create more fun things. Right now I am just learning cs things. 
+  <p>This is my very first web page. And I'm very excited to make use of whatever I learn well and create more fun things. Right now I am just learning cs things. 
   So this website could be a little messy. >.<°:•.🐠*.•🪸.•:° </p>
 
   <p>Want to learn more? Visit my 
@@ -371,7 +371,7 @@ function startTimer() {
     if (remainingTime <= 0) {
       clearInterval(timerInterval);
       isRunning = false;
-      display.textContent = "🎉 Done!";
+      display.textContent = "Times Up! ⊹₊⟡⋆";
       finishSound.play();
       return;
     }
@@ -593,6 +593,7 @@ guideBtn.addEventListener("click", () => {
       • Switch to  Night Mode using the 🔮 button.<br>
       • Click on the Instagram/Github buttons to know more about the devoloper .<br>
       • There's a timer given below that can be used to focus for a long time. <br>
+      • Also did you see that froggy?? 
       • Just vibe and study...	   
     </p>
   `;
@@ -636,7 +637,7 @@ guideBtn.addEventListener("click", () => {
 <script>
 document.getElementById("froggy").addEventListener("click", () => {
   const bubble = document.createElement("div");
-  bubble.textContent = "You Can Do This.( ദ്ദി ˙ᗜ˙ ) ";
+  bubble.textContent = "New Update🗣️: LOAFSKY (No! Absolutely not a pixel game 📟 ฅᨐฅ..";
   bubble.style.position = "fixed";
   bubble.style.bottom = "110px";
   bubble.style.right = "30px";
