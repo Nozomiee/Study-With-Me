@@ -240,10 +240,35 @@ img.cozy-characters {
   50% { bottom: 25px; }
 }
 
+#reviewBox {
+  background-color: #fffbe7;
+  padding: 1rem;
+  margin: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
+#reviewInput {
+  width: 100%;
+  height: 100px;
+  border-radius: 8px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+}
 
+#reviewBox button {
+  background-color: #fca3cc;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}	  
+</style>
 
-  </style>
+	
  <!-- jQuery (needed for jQuery plugins) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -263,7 +288,7 @@ img.cozy-characters {
   <div class="decor">⊹₊ ˚‧︵‿₊୨୧₊‿︵‧ ˚ ₊⊹</div>	
   <img id="froggy"
      src="froggy.png"
-     alt="Night Froggy"
+     alt="Floating Froggy Update Icon"
      style="
        position: fixed;
        bottom: 40px;
@@ -317,6 +342,14 @@ img.cozy-characters {
   <audio id="finish-sound" src="done.mp3" preload="auto"></audio>
 </div>
 
+
+<section id="reviewBox">
+  <h3>Leave a Review (˶ˆᗜˆ˵)🌱 </h3>
+  <textarea placeholder="Did you enjoy exploring my page? .🌷." id="reviewInput"></textarea>
+  <button onclick="submitReview()">Submit</button>
+<div id="reviewList"></div>
+</section>
+	
 
 
   <p>This is my very first web page. And I'm very excited to make use of whatever I learn well and create more fun things. Right now I am just learning cs things. 
@@ -664,5 +697,54 @@ document.getElementById("froggy").addEventListener("click", () => {
 });
 </script>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBG-1U8gQ_TUo5dC0bdjmAzGYj2BwT8u1",
+    authDomain: "studywithmice-reviews.firebaseapp.com",
+    databaseURL: "https://studywithmice-reviews-default-rtdb.firebaseio.com",
+    projectId: "studywithmice-reviews",
+    storageBucket: "studywithmice-reviews.appspot.com",
+    messagingSenderId: "1083114870283",
+    appId: "1:1083114870283:web:953f1a307a25294880090e",
+    measurementId: "G-SVN0P6GCMW"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  function submitReview() {
+    const review = document.getElementById("reviewInput").value;
+    if (review.trim() === "") return;  //  prevents empty or space-only reviews
+
+    if (review.length > 200) {
+    alert("Keep your review under 200 characters please.✧ ٩(ˊᗜˋ )و✧");
+    return;
+  }
+	  
+    db.ref("reviews").push().set({
+      text: review,
+      timestamp: Date.now()
+    });
+    document.getElementById("reviewInput").value = "";
+  }
+
+  db.ref("reviews").on("value", (snapshot) => {
+    const reviews = snapshot.val();
+    const reviewList = document.getElementById("reviewList");
+    reviewList.innerHTML = "";
+    for (let id in reviews) {
+      const p = document.createElement("p");
+      p.textContent = reviews[id].text;
+      reviewList.appendChild(p);
+    }
+  });
+</script>
+
+	  
 </body>
 </html>
