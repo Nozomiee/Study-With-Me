@@ -265,7 +265,34 @@ img.cozy-characters {
   color: white;
   font-weight: bold;
   cursor: pointer;
+}
+
+
+.dark-theme textarea,
+.dark-theme #reviewBox,
+.dark-theme #reviewBox h3 {
+  color: #f3f3f3; /* brighter for readability */
+  background-color: #2a2a4b; /* soft nightbox */
+}
+
+.dark-theme textarea::placeholder {
+  color: #ccc; /* improve placeholder contrast */
+}
+.dark-theme #reviewBox button {
+  background-color: #ff79b0;
+  color: #fff;
+}
+
+#reviewList p {
+  background-color: #fef7f1;
+  border-left: 4px solid #ff9ab5;
+  padding: 8px 12px;
+  margin: 8px 0;
+  border-radius: 6px;
+  font-family: 'Comic Neue', cursive;
+  color: #444;
 }	  
+	  
 </style>
 
 	
@@ -345,8 +372,9 @@ img.cozy-characters {
 
 <section id="reviewBox">
   <h3>Leave a Review (˶ˆᗜˆ˵)🌱 </h3>
-  <textarea placeholder="Did you enjoy exploring my page? .🌷." id="reviewInput"></textarea>
-  <button onclick="submitReview()">Submit</button>
+  <textarea id="reviewInput" placeholder="Did you enjoy exploring my page? .🌷." maxlength="200"></textarea>
+  <small id="charCount" style="display:block; text-align:right; color:#888;">0 / 200</small>
+<button onclick="submitReview()">Submit</button>
 <div id="reviewList"></div>
 </section>
 	
@@ -712,36 +740,47 @@ document.getElementById("froggy").addEventListener("click", () => {
     appId: "1:1083114870283:web:953f1a307a25294880090e",
     measurementId: "G-SVN0P6GCMW"
   };
-
+	
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
   function submitReview() {
     const review = document.getElementById("reviewInput").value;
-    if (review.trim() === "") return;  //  prevents empty or space-only reviews
+    if (review.trim() === "") return;
 
     if (review.length > 200) {
-    alert("Keep your review under 200 characters please.✧ ٩(ˊᗜˋ )و✧");
-    return;
-  }
-	  
+      alert("Keep your review under 200 characters please.✧ ٩(ˊᗜˋ )و✧");
+      return;
+    }
+
     db.ref("reviews").push().set({
       text: review,
       timestamp: Date.now()
     });
+
     document.getElementById("reviewInput").value = "";
+    charCount.textContent = "0 / 200"; // reset counter too!
   }
 
   db.ref("reviews").on("value", (snapshot) => {
     const reviews = snapshot.val();
     const reviewList = document.getElementById("reviewList");
     reviewList.innerHTML = "";
+
     for (let id in reviews) {
       const p = document.createElement("p");
       p.textContent = reviews[id].text;
       reviewList.appendChild(p);
     }
+  });
+
+  // Live character counter
+  const reviewInput = document.getElementById("reviewInput");
+  const charCount = document.getElementById("charCount");
+
+  reviewInput.addEventListener("input", () => {
+    charCount.textContent = `${reviewInput.value.length} / 200`;
   });
 </script>
 
