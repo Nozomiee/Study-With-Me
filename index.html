@@ -293,10 +293,6 @@ img.cozy-characters {
   color: #444;
   box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 }
-	  
-{
-  animation: popIn 0.3s ease-out;
-}
 
 @keyframes popIn {
   from {
@@ -665,16 +661,16 @@ guideBtn.addEventListener("click", () => {
   const guideBox = document.createElement("div");
   guideBox.innerHTML = `
     <h5 style="font-size: 1.5rem; margin-top: 0;">📝 Guide</h5>
-	<p class="guide-text"> <style="font-size:1.1rem; line-height: 1.5;">
-      • Click the  buttons to ▶️ play,  ⏸️pause, or ⏹️stop music.<br>
-      • Tap the cute mouse to get a motivation message.<br>
-      • Switch to  Night Mode using the 🔮 button.<br>
-      • Click on the Instagram/Github buttons to know more about the devoloper .<br>
-      • There's a timer given below that can be used to focus for a long time. <br>
-      • Also did you see that froggy?? 
-      • That review note is adjustable.˗ˏˋ ꒰ ✉︎ ꒱ ˎˊ˗
-      • Just vibe and study...	   
-    </p>
+<p class="guide-text" style="font-size:1.1rem; line-height: 1.5;">
+  • Click the buttons to ▶️ play, ⏸️ pause, or ⏹️ stop music.<br>
+  • Tap the cute mouse to get a motivation message.<br>
+  • Switch to Night Mode using the 🔮 button.<br>
+  • Click on the Instagram/Github buttons to know more about the developer.<br>
+  • There's a timer given below that can be used to focus for a long time.<br>
+  • Also did you see that froggy??<br>
+  • That review note is adjustable. ˗ˏˋ ꒰ ✉︎ ꒱ ˎˊ˗<br>
+  • Just vibe and study...	   
+</p>
   `;
 
   guideBox.style.position = "fixed";
@@ -748,17 +744,6 @@ document.getElementById("froggy").addEventListener("click", () => {
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
 
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBG-1U8gQ_TUo5dC0bdjmAzGYj2BwT8u1",
-    authDomain: "studywithmice-reviews.firebaseapp.com",
-    databaseURL: "https://studywithmice-reviews-default-rtdb.firebaseio.com",
-    projectId: "studywithmice-reviews",
-    storageBucket: "studywithmice-reviews.appspot.com",
-    messagingSenderId: "1083114870283",
-    appId: "1:1083114870283:web:953f1a307a25294880090e",
-    measurementId: "G-SVN0P6GCMW"
-  };
-
   // Initialize Firebase (modular alternative setup kept classic for compatibility)
   const firebaseConfig = {
     apiKey: "AIzaSyBG-1U8gQ_TUo5dC0bdjmAzGYj2BwT8u1",
