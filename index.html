@@ -304,6 +304,8 @@ img.cozy-characters {
 	  
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/bad-words@3.0.4/lib/badwords.min.js"></script>
+
 	
  <!-- jQuery (needed for jQuery plugins) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -383,6 +385,7 @@ img.cozy-characters {
   <h3>Leave your thoughts here! (˶ˆᗜˆ˵)🌱 </h3>
   <textarea id="reviewInput" placeholder="Did you enjoy exploring my page? .🌷." maxlength="200"></textarea>
   <small id="charCount" style="display:block; text-align:right; color:#888;">0 / 200</small>
+<div class="g-recaptcha" data-sitekey="6LfUlogrAAAAAEJ2C4Jic7zbOsjrfFh5OcBDHzgw"></div>
 <button onclick="submitReview()">Submit</button>
 <div id="reviewList"></div>
 </section>
@@ -738,13 +741,16 @@ document.getElementById("froggy").addEventListener("click", () => {
 });
 </script>
 
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>	
 <!-- Firebase SDKs -->
-<!-- Firebase compat SDKs (for plain HTML projects) -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="https://unpkg.com/bad-words"></script>
+
 
 <script>
-  // Initialize Firebase (modular alternative setup kept classic for compatibility)
+  // Initialize Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyBG-1U8gQ_TUo5dC0bdjmAzGYj2BwT8u1",
     authDomain: "studywithmice-reviews.firebaseapp.com",
@@ -763,6 +769,8 @@ document.getElementById("froggy").addEventListener("click", () => {
   const charCount = document.getElementById("charCount");
   const reviewList = document.getElementById("reviewList");
 
+  const filter = new window.BadWordsFilter();
+
   reviewInput.addEventListener("input", () => {
     charCount.textContent = `${reviewInput.value.length} / 200`;
   });
@@ -770,32 +778,52 @@ document.getElementById("froggy").addEventListener("click", () => {
   function submitReview() {
     const reviewText = reviewInput.value.trim();
 
+    // 1. Profanity check
+    if (filter.isProfane(reviewText)) {
+      alert("Hold up. That review’s got words we don’t allow here. Be kind.");
+      return;
+    }
+
+    // 2. Empty check
     if (reviewText === "") {
       alert("Please leave your thoughts here. (˶ˆᗜˆ˵)🌱");
       return;
     }
 
+    // 3. Character limit check
     if (reviewText.length > 200) {
       alert("Sorry! You cannot exceed that 200 character limit.");
       return;
     }
 
+    // 4. reCAPTCHA validation
+    const recaptchaResponse = grecaptcha.getResponse();
+    if (recaptchaResponse.length === 0) {
+      alert("Please verify you are human.");
+      return;
+    }
+
+    // 5. Push to Firebase
     db.ref("reviews").push().set({
       text: reviewText,
       timestamp: Date.now()
     });
 
+    // 6. Clear input and char count
     reviewInput.value = "";
     charCount.textContent = "0 / 200";
+
+    // 7. Reset reCAPTCHA
+    grecaptcha.reset();
   }
 
+  // Real-time fetch and display reviews
   db.ref("reviews").on("value", (snapshot) => {
     const data = snapshot.val();
     reviewList.innerHTML = "";
 
     if (!data) return;
 
-    // Convert to array and sort by timestamp descending
     const sortedReviews = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
 
     sortedReviews.forEach((review) => {
@@ -814,7 +842,6 @@ document.getElementById("froggy").addEventListener("click", () => {
   });
 </script>
 
-
-	  
+  
 </body>
 </html>
