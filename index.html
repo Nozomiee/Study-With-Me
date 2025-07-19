@@ -283,7 +283,7 @@ img.cozy-characters {
   color: #fff;
 }
 
-#reviewList p {
+#reviewList div {
   background-color: #fef7f1;
   border-left: 4px solid #ff9ab5;
   padding: 8px 12px;
@@ -291,7 +291,24 @@ img.cozy-characters {
   border-radius: 6px;
   font-family: 'Comic Neue', cursive;
   color: #444;
-}	  
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+	  
+{
+  animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 	  
 </style>
 
@@ -741,49 +758,77 @@ document.getElementById("froggy").addEventListener("click", () => {
     appId: "1:1083114870283:web:953f1a307a25294880090e",
     measurementId: "G-SVN0P6GCMW"
   };
-	
-  // Initialize Firebase
+
+  // Initialize Firebase (modular alternative setup kept classic for compatibility)
+  const firebaseConfig = {
+    apiKey: "AIzaSyBG-1U8gQ_TUo5dC0bdjmAzGYj2BwT8u1",
+    authDomain: "studywithmice-reviews.firebaseapp.com",
+    databaseURL: "https://studywithmice-reviews-default-rtdb.firebaseio.com",
+    projectId: "studywithmice-reviews",
+    storageBucket: "studywithmice-reviews.appspot.com",
+    messagingSenderId: "1083114870283",
+    appId: "1:1083114870283:web:953f1a307a25294880090e",
+    measurementId: "G-SVN0P6GCMW"
+  };
+
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  function submitReview() {
-    const review = document.getElementById("reviewInput").value;
-    if (review.trim() === "") return;
-
-    if (review.length > 200) {
-      alert("Keep your review under 200 characters please.✧ ٩(ˊᗜˋ )و✧");
-      return;
-    }
-
-    db.ref("reviews").push().set({
-      text: review,
-      timestamp: Date.now()
-    });
-
-    document.getElementById("reviewInput").value = "";
-    charCount.textContent = "0 / 200"; // reset counter too!
-  }
-
-  db.ref("reviews").on("value", (snapshot) => {
-    const reviews = snapshot.val();
-    const reviewList = document.getElementById("reviewList");
-    reviewList.innerHTML = "";
-
-    for (let id in reviews) {
-      const p = document.createElement("p");
-      p.textContent = reviews[id].text;
-      reviewList.appendChild(p);
-    }
-  });
-
-  // Live character counter
   const reviewInput = document.getElementById("reviewInput");
   const charCount = document.getElementById("charCount");
+  const reviewList = document.getElementById("reviewList");
 
   reviewInput.addEventListener("input", () => {
     charCount.textContent = `${reviewInput.value.length} / 200`;
   });
+
+  function submitReview() {
+    const reviewText = reviewInput.value.trim();
+
+    if (reviewText === "") {
+      alert("Please leave your thoughts here. (˶ˆᗜˆ˵)🌱");
+      return;
+    }
+
+    if (reviewText.length > 200) {
+      alert("Sorry! You cannot exceed that 200 character limit.");
+      return;
+    }
+
+    db.ref("reviews").push().set({
+      text: reviewText,
+      timestamp: Date.now()
+    });
+
+    reviewInput.value = "";
+    charCount.textContent = "0 / 200";
+  }
+
+  db.ref("reviews").on("value", (snapshot) => {
+    const data = snapshot.val();
+    reviewList.innerHTML = "";
+
+    if (!data) return;
+
+    // Convert to array and sort by timestamp descending
+    const sortedReviews = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+
+    sortedReviews.forEach((review) => {
+      const bubble = document.createElement("div");
+      bubble.style.padding = "10px 14px";
+      bubble.style.margin = "10px 0";
+      bubble.style.borderRadius = "20px";
+      bubble.style.background = "#ffeef2";
+      bubble.style.color = "#333";
+      bubble.style.maxWidth = "90%";
+      bubble.style.fontFamily = `'Comic Sans MS', cursive`;
+      bubble.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
+      bubble.textContent = review.text;
+      reviewList.appendChild(bubble);
+    });
+  });
 </script>
+
 
 	  
 </body>
